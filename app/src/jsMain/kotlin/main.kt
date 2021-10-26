@@ -1,34 +1,35 @@
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import org.jetbrains.compose.web.css.padding
-import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.dom.Button
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.Span
-import org.jetbrains.compose.web.dom.Text
+import androidx.compose.runtime.*
+import com.example.playermodels.*
+import kotlinx.browser.document
+import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
+import org.w3c.dom.HTMLMediaElement
+
 
 fun main() {
-    var count: Int by mutableStateOf(0)
+    val video = document.getElementById("video") as HTMLMediaElement
+    val nutJsPlayer = JsPlayer(video)
+    nutJsPlayer.load()
 
     renderComposable(rootElementId = "root") {
+        val videoState: NutPlayerState by nutJsPlayer.stateFlow.collectAsState(UndefinedState)
         Div({ style { padding(25.px) } }) {
-            Button(attrs = {
-                onClick { count -= 1 }
-            }) {
-                Text("-")
-            }
-
-            Span({ style { padding(15.px) } }) {
-                Text("$count")
-            }
-
-            Button(attrs = {
-                onClick { count += 1 }
-            }) {
-                Text("+")
-            }
+            PrintState(videoState)
         }
     }
+}
+
+@Composable
+fun PrintState(nutPlayerState: NutPlayerState){
+    val strState = when(val state = nutPlayerState){
+        UndefinedState -> "UndefinedState"
+        LoadingState -> "LoadingState"
+        EndState -> "EndState"
+        is ReadyState -> {
+            val playingState = if(state.isPlaying) "Playing" else "Pause"
+            "$playingState position = ${state.position} duration = ${state.duration}"
+        }
+    }
+    Text(strState)
 }
