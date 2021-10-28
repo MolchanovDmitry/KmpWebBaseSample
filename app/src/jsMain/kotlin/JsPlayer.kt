@@ -4,12 +4,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.dom.clear
 import org.w3c.dom.HTMLMediaElement
 
-class JsPlayer(private val video: HTMLMediaElement) : NutPlayer {
+class JsPlayer(private val video: HTMLMediaElement) : Player {
 
-    private val _stateFlow = MutableStateFlow<NutPlayerState>(UndefinedState)
+    private val _stateFlow = MutableStateFlow<PlayerState>(UndefinedState)
     val stateFlow = _stateFlow.asStateFlow()
 
-    private var state: NutPlayerState = UndefinedState
+    private var state: PlayerState = UndefinedState
         set(value) {
             field = value
             _stateFlow.value = value
@@ -18,6 +18,8 @@ class JsPlayer(private val video: HTMLMediaElement) : NutPlayer {
     init {
         initListeners()
     }
+
+    override var listener: NutPlayerListener? = null
 
     override fun load() {
         state = LoadingState
@@ -58,7 +60,7 @@ class JsPlayer(private val video: HTMLMediaElement) : NutPlayer {
     }
 
     private fun getReadyState(isPlaying: Boolean) = ReadyState(
-        nutPlayer = this@JsPlayer,
+        player = this@JsPlayer,
         isPlaying = isPlaying,
         position = video.currentTime.toLong(),
         duration = video.duration.toLong()

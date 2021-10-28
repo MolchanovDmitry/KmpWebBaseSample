@@ -1,18 +1,15 @@
-import org.jetbrains.compose.compose
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
 
 plugins {
-    // __KOTLIN_COMPOSE_VERSION__
-    kotlin("multiplatform") version "1.5.31"
-    // __LATEST_COMPOSE_RELEASE_VERSION__
+    kotlin("multiplatform")
     id("org.jetbrains.compose") version ("1.0.0-beta1")
 }
+
+version = "1.0"
 
 repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
 }
 
 kotlin {
@@ -21,11 +18,12 @@ kotlin {
         binaries.executable()
     }
     sourceSets {
-        val jsMain by getting {
+        val jsMain by getting {/*
             kotlin.srcDir("src/main/kotlin")
-            resources.srcDir("src/main/resources")
+            resources.srcDir("src/main/resources")*/
 
             dependencies {
+                implementation(project(":playermodels"))
                 implementation(compose.web.core)
                 implementation(compose.runtime)
             }

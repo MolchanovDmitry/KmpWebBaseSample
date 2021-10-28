@@ -13,7 +13,7 @@ fun main() {
     nutJsPlayer.load()
 
     renderComposable(rootElementId = "root") {
-        val videoState: NutPlayerState by nutJsPlayer.stateFlow.collectAsState(UndefinedState)
+        val videoState: PlayerState by nutJsPlayer.stateFlow.collectAsState(UndefinedState)
         Div({ style { padding(25.px) } }) {
             PrintState(videoState)
         }
@@ -21,7 +21,7 @@ fun main() {
 }
 
 @Composable
-fun PrintState(nutPlayerState: NutPlayerState){
+fun PrintState(nutPlayerState: PlayerState){
     val strState = when(val state = nutPlayerState){
         UndefinedState -> "UndefinedState"
         LoadingState -> "LoadingState"
