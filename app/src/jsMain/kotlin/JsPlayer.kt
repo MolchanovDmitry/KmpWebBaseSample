@@ -1,6 +1,10 @@
 import com.example.playermodels.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.dom.clear
 import org.w3c.dom.HTMLMediaElement
 
@@ -8,6 +12,9 @@ class JsPlayer(private val video: HTMLMediaElement) : Player {
 
     private val _stateFlow = MutableStateFlow<PlayerState>(UndefinedState)
     val stateFlow = _stateFlow.asStateFlow()
+
+    private val provider = FakeProvider()
+    private val uiScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private var state: PlayerState = UndefinedState
         set(value) {
@@ -19,11 +26,14 @@ class JsPlayer(private val video: HTMLMediaElement) : Player {
         initListeners()
     }
 
+    // реализовать [StateFlow] под иос и удалить.
     override var listener: NutPlayerListener? = null
 
     override fun load() {
         state = LoadingState
-        video.src = "https://clck.ru/YQb6f"
+        uiScope.launch {
+            video.src = provider.load()
+        }
     }
 
     override fun mute() {

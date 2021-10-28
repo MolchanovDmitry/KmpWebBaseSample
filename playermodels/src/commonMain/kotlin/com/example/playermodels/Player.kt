@@ -5,6 +5,7 @@ package com.example.playermodels
  */
 interface Player {
 
+    // реализовать [StateFlow] под иос и удалить.
     var listener: NutPlayerListener?
 
     fun load()
@@ -20,7 +21,7 @@ interface Player {
     fun clear()
 }
 
-// TODO заменить на stateFlow в будущем.
+// реализовать [StateFlow] под иос и удалить.
 interface NutPlayerListener{
 
     fun onStateChanged(nutPlayerState: PlayerState)
