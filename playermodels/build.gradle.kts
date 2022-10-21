@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.kotlin.native.cocoapods")
 }
 
 // CocoaPods requires the podspec to have a version.

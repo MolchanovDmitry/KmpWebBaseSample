@@ -27,7 +27,7 @@ class JsPlayer(private val video: HTMLMediaElement) : Player {
     }
 
     // реализовать [StateFlow] под иос и удалить.
-    override var listener: NutPlayerListener? = null
+    override var listener: PlayerListener? = null
 
     override fun load() {
         state = LoadingState

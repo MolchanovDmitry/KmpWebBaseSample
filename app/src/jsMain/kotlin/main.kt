@@ -9,11 +9,11 @@ import org.w3c.dom.HTMLMediaElement
 
 fun main() {
     val video = document.getElementById("video") as HTMLMediaElement
-    val nutJsPlayer = JsPlayer(video)
-    nutJsPlayer.load()
+    val jsPlayer = JsPlayer(video)
+    jsPlayer.load()
 
     renderComposable(rootElementId = "root") {
-        val videoState: PlayerState by nutJsPlayer.stateFlow.collectAsState(UndefinedState)
+        val videoState: PlayerState by jsPlayer.stateFlow.collectAsState(UndefinedState)
         Div({ style { padding(25.px) } }) {
             PrintState(videoState)
         }
@@ -21,8 +21,8 @@ fun main() {
 }
 
 @Composable
-fun PrintState(nutPlayerState: PlayerState){
-    val strState = when(val state = nutPlayerState){
+fun PrintState(playerState: PlayerState){
+    val strState = when(val state = playerState){
         UndefinedState -> "UndefinedState"
         LoadingState -> "LoadingState"
         EndState -> "EndState"
